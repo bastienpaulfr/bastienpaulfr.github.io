@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bastien Paul&#39;s Blog">
+    <meta name="Author" content="Bastien Paul">
+    <meta name="keywords" content="hugo blog linux android java kotlin c">
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/syntax.css>
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/style.css>
+    <script src="https://kit.fontawesome.com/1b7478c139.js" crossorigin="anonymous"></script>
+    <title>Bastien Paul&#39;s Blog</title>
+  </head><body><aside id="sidenav">
+    <header>
+    
+
+    <a id="branding" href=http://bastien.famillepaul.fr/>
+        
+            Bastien Paul&#39;s Blog
+        
+    </a>
+    </header>
+
+    <nav>
+        
+            		
+            <a href="/"
+                
+            >
+                <i class="fas fa-home fa-sm"></i>
+                <span>home</span>
+            </a>
+        
+            		
+            <a href="https://github.com/bastienpaulfr"
+                
+                    target="_blanck"
+                
+            >
+                <i class="fab fa-github fa-ms"></i>
+                <span>github</span>
+            </a>
+        
+            		
+            <a href="/contact"
+                
+            >
+                <i class="far fa-envelope"></i>
+                <span>contact</span>
+            </a>
+        
+</aside>
+<main id="main">
+            <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
+            <div class="content">
+    
+    <h1 id="title">Singleton</h1>
+    
+      
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#présentation">Présentation</a></li>
+    <li><a href="#implémentation-en-c">Implémentation en C++</a></li>
+    <li><a href="#multi-threading">Multi-Threading</a></li>
+  </ul>
+</nav>
+    <h1 id="singleton">Singleton</h1>
+<h2 id="présentation">Présentation</h2>
+<p>Le singleton est un patron de conception (design pattern) dont le but est de restreindre l’instanciation  d’une classe à un nombre défini d’objets. Il est utilisé lorsque l’on a besoin que d’un seul objet pour coordonner des actions dans un système. Par exemple, le singleton va être utilisé comme gestionnaire de fenêtre, gestionnaire de systèmes de fichiers ou d’imprimantes. Le singleton va être disponible de manière globale dans un package et sera utilisé comme étant un point d’accès.</p>
+<p>Le singleton est une classe qui va s’instancier elle-même. Ses constructeurs seront donc définis comme étant privés. Elle met à disposition une méthode statique pour récupérer son instance. Cette méthode vérifie qu’une seule instance existe ou en crée une si elle n’existe pas encore.</p>
+<p>Une attention particulière sera donnée dans les environnements multi-threadés. Si deux thread essaient d’accéder à l’objet, un seul devra l’instancier tandis que le deuxième obtiendra une référence sur l’objet nouvellement créé.</p>
+<h2 id="implémentation-en-c">Implémentation en C++</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">template</span> <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">typename</span> T<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton</span>
+{
+    <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+        <span style="color:#66d9ef">static</span> T<span style="color:#f92672">*</span> Get() {
+            <span style="color:#66d9ef">if</span>(null <span style="color:#f92672">==</span> m_intance) {
+                m_instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> T;
+            }
+            <span style="color:#66d9ef">return</span> m_instance;
+        }
+
+    <span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+        Singleton(){};
+        <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Singleton(){};
+
+    <span style="color:#66d9ef">private</span> <span style="color:#f92672">:</span>
+        <span style="color:#66d9ef">static</span> T<span style="color:#f92672">*</span> m_instance;
+};
+</code></pre></div><p>Les classes peuvent ensuite hériter de <code>Singleton</code>. Elles seront instanciées par la méthode héritée <code>Get()</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">lass Eur : <span style="color:#66d9ef">public</span> Singleton<span style="color:#f92672">&lt;</span>Eur<span style="color:#f92672">&gt;</span>
+{
+    <span style="color:#66d9ef">friend</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton</span><span style="color:#f92672">&lt;</span>Eur<span style="color:#f92672">&gt;</span>;
+};
+
+func(){
+    Eur<span style="color:#f92672">*</span> obj <span style="color:#f92672">=</span> Eur<span style="color:#f92672">::</span>Get();
+};
+</code></pre></div><h2 id="multi-threading">Multi-Threading</h2>
+<p>Dans un environnement multi-tâche,  il est important de protéger le code d’instanciation pour éviter d’avoir plusieurs références vers le Singleton lorsque celui-ci est appelé depuis plusieurs threads différents.</p>
+<p>La solution peut être comme suit :</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">template</span> <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">typename</span> T<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton</span>
+{
+    <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+        <span style="color:#66d9ef">static</span> T<span style="color:#f92672">*</span> Get() {
+            m_mutex.Lock();
+            <span style="color:#66d9ef">if</span>(null <span style="color:#f92672">==</span> m_intance) {
+                m_instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> T;
+            }
+            m_mutex.unlock();
+            <span style="color:#66d9ef">return</span> m_instance;
+        }
+
+    <span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+        Singleton(){};
+        <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Singleton(){};
+
+    <span style="color:#66d9ef">private</span> <span style="color:#f92672">:</span>
+        <span style="color:#66d9ef">static</span> T<span style="color:#f92672">*</span> m_instance;
+        <span style="color:#66d9ef">static</span> Mutex m_mutex;
+};
+</code></pre></div><p>Ici <code>Mutex</code> est une classe qui initialise le mutex dans son constructeur par défaut et présente les méthodes <code>Lock()</code> et <code>Unlock()</code> pour locker et délocker le mutex.</p>
+<p>Le problème de cette solution est que le mutex est locké à chaque appel de <code>Get()</code>. Ceci peut être coûteux en nombre d’instruction en comparaison avec un simple test pour savoir si m_instance existe. D’autant plus que le Singleton n’est instancié qu’une seule fois pendant la durée de vie du programme.</p>
+<p>Une proposition d’optimisation serait de tester une première fois si l’instance existe sans locker le mutex puis de tester une seconde fois sous protection dans le cas ou l’instance n’existe pas. Ceci ajoute un test dans le cas ou l’instance n’existe pas, mais enlève tout appel au mutex dans le cas ou elle existe.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">template</span> <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">typename</span> T<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton</span>
+{
+    <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+        <span style="color:#66d9ef">static</span> T<span style="color:#f92672">*</span> Get() {
+            <span style="color:#66d9ef">if</span>(null <span style="color:#f92672">==</span> instance)
+            {
+                m_mutex.Lock();
+                <span style="color:#66d9ef">if</span>(null <span style="color:#f92672">==</span> m_intance) {
+                    m_instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> T;
+                }
+                m_mutex.unlock();
+            }
+            <span style="color:#66d9ef">return</span> m_instance;
+        }
+
+    <span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+        Singleton(){};
+        <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Singleton(){};
+
+    <span style="color:#66d9ef">private</span> <span style="color:#f92672">:</span>
+        <span style="color:#66d9ef">static</span> T<span style="color:#f92672">*</span> m_instance;
+        <span style="color:#66d9ef">static</span> Mutex m_mutex;
+};
+</code></pre></div><p>Cette solution est valide car les accès concurrents en lecture ne sont pas pénalisant. En effet, le <code>Singleton</code> est le même pour tous les threads.</p>
+
+    
+    <div class="nav-next-prev">
+        <div class="nav-prev">
+            
+                <a href="http://bastien.famillepaul.fr/posts/tun-tap/"><i class="fas fa-chevron-left"></i></a>
+            
+        </div>
+        <a class="nav-top" href="#">top</i></a>
+        <div class="nav-next">
+            
+                <a href="http://bastien.famillepaul.fr/posts/mutex-locker/"><i class="fas fa-chevron-right"></i></a>
+            
+        </div>
+    </div>
+    
+
+            </div><footer>
+<div class="footer-content">
+<div class="contact-info">
+    
+    
+</div>
+
+</div>
+</footer></main>
+    </body>
+    <script src=http://bastien.famillepaul.fr/js/navbutton.js></script>
+</html>

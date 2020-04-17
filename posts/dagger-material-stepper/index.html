@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bastien Paul&#39;s Blog">
+    <meta name="Author" content="Bastien Paul">
+    <meta name="keywords" content="hugo blog linux android java kotlin c">
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/syntax.css>
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/style.css>
+    <script src="https://kit.fontawesome.com/1b7478c139.js" crossorigin="anonymous"></script>
+    <title>Bastien Paul&#39;s Blog</title>
+  </head><body><aside id="sidenav">
+    <header>
+    
+
+    <a id="branding" href=http://bastien.famillepaul.fr/>
+        
+            Bastien Paul&#39;s Blog
+        
+    </a>
+    </header>
+
+    <nav>
+        
+            		
+            <a href="/"
+                
+            >
+                <i class="fas fa-home fa-sm"></i>
+                <span>home</span>
+            </a>
+        
+            		
+            <a href="https://github.com/bastienpaulfr"
+                
+                    target="_blanck"
+                
+            >
+                <i class="fab fa-github fa-ms"></i>
+                <span>github</span>
+            </a>
+        
+            		
+            <a href="/contact"
+                
+            >
+                <i class="far fa-envelope"></i>
+                <span>contact</span>
+            </a>
+        
+</aside>
+<main id="main">
+            <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
+            <div class="content">
+    
+    <h1 id="title">Use Dagger Provider with Android Material Stepper</h1>
+    
+      
+    <nav id="TableOfContents"></nav>
+    <h1 id="use-dagger-provider-with-android-material-stepper">Use Dagger Provider with Android Material Stepper</h1>
+<p>On an Android project, I am using <a href="https://github.com/stepstone-tech/android-material-stepper">android-material-stepper</a> from StepStone. I am also using dependency injection with <a href="https://google.github.io/dagger/">dagger</a>.</p>
+<p>I was facing the following problem : How to properly inject <code>Fragments</code> without the need to create a <code>DaggerComponent</code> for each of them ?</p>
+<p>Providers are here to help. This is how I am doing</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StepFragmentBL</span> @Inject <span style="color:#66d9ef">constructor</span>() :
+ Fragment(), Step, BlView {
+
+    @Inject
+    <span style="color:#66d9ef">lateinit</span> <span style="color:#66d9ef">var</span> blPresenter: BlPresenter
+
+    ...
+}
+</code></pre></div><p>This is one of the Fragment I am creating. We can see the <code>@Inject constructor</code> with <code>@Inject lateinit</code> var that shows that this object is injectable by dagger. It is also implementing <code>Step</code> to be used by <code>StepperLayout</code> and implements another interface.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BlPresenter</span> @Inject <span style="color:#66d9ef">constructor</span>
+
+BlPresenter <span style="color:#66d9ef">is</span> a simple injectable <span style="color:#66d9ef">class</span>
+
+<span style="color:#a6e22e">@Singleton</span>
+@Component(modules = [(DeliveryModule<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>)])
+<span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">DeliveryComponents</span> {
+
+    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">inject</span>(deliveryActivity: DeliveryActivity)
+}
+</code></pre></div><p>This is the component injecting my Activity</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">@Module
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DeliveryModule</span>(<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> activity: DeliveryActivity) {
+
+    @Named(<span style="color:#e6db74">&#34;Activity&#34;</span>)
+    @Provides
+    <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">providesContext</span>(): Context {
+        <span style="color:#66d9ef">return</span> activity
+    }
+
+    @Provides
+    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">providesFragmentManager</span>(): FragmentManager {
+        <span style="color:#66d9ef">return</span> activity.supportFragmentManager
+    }
+}
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DeliveryActivity</span> : AppCompatActivity() {
+
+    @Inject
+    <span style="color:#66d9ef">lateinit</span> <span style="color:#66d9ef">var</span> deliveryPresenter: DeliveryPresenter
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">lateinit</span> <span style="color:#66d9ef">var</span> deliveryComponents: DeliveryComponents
+
+    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">onCreate</span>(savedInstanceState: Bundle?) {
+        <span style="color:#66d9ef">super</span>.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_home)
+
+        di()
+        ui()
+    }
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">di</span>() {
+        deliveryComponents = DaggerDeliveryComponents.builder()
+                .deliveryModule(DeliveryModule(<span style="color:#66d9ef">this</span>))
+                .build()
+        deliveryComponents.inject(<span style="color:#66d9ef">this</span>)
+    }
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">ui</span>() {
+        Timber.v(Info.getMethodName())
+        stepperLayout.adapter = deliveryPresenter.stepperAdapter
+    }
+}
+</code></pre></div><p>We are creating the component into the <code>Activity</code> here. Then, presenter for this activity is also injected</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DeliveryPresenter</span> @Inject <span style="color:#66d9ef">constructor</span>() {
+
+    @Inject
+    <span style="color:#66d9ef">lateinit</span> <span style="color:#66d9ef">var</span> stepperAdapter: PickingStepperAdapter
+
+}
+</code></pre></div><p>We are arriving to a <code>StepperAdapter</code> instance, also injected</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">val</span> NB_FRAG = <span style="color:#ae81ff">2</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PickingStepperAdapter</span> @Inject <span style="color:#66d9ef">constructor</span>(
+        fm: FragmentManager,
+        @Named(<span style="color:#e6db74">&#34;Activity&#34;</span>) context: Context) :
+            AbstractFragmentStepAdapter(fm, context) {
+
+    <span style="color:#75715e">/**
+</span><span style="color:#75715e">    * Provider for Fragment
+</span><span style="color:#75715e">    */</span>
+    @Inject
+    <span style="color:#66d9ef">lateinit</span> <span style="color:#66d9ef">var</span> blFragmentProvider: Provider&lt;StepFragmentBL&gt;
+
+    <span style="color:#75715e">/**
+</span><span style="color:#75715e">    * Provider for Fragment
+</span><span style="color:#75715e">    */</span>
+    @Inject
+    <span style="color:#66d9ef">lateinit</span> <span style="color:#66d9ef">var</span> pdtFragmentProvider: Provider&lt;StepFragmentPdt&gt;
+
+    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">getCount</span>(): Int {
+        <span style="color:#66d9ef">return</span> NB_FRAG
+    }
+
+    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">createStep</span>(position: Int): Step {
+        Timber.v(<span style="color:#e6db74">&#34;${Info.getMethodName()} $position&#34;</span>)
+
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">when</span> (position) {
+            <span style="color:#ae81ff">0</span> -&gt; blFragmentProvider.<span style="color:#66d9ef">get</span>()
+            <span style="color:#66d9ef">else</span> -&gt; pdtFragmentProvider.<span style="color:#66d9ef">get</span>()
+        }
+    }
+}
+</code></pre></div><p>Here, we are just using</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">@Inject
+    <span style="color:#66d9ef">lateinit</span> <span style="color:#66d9ef">var</span> blFragmentProvider: Provider&lt;StepFragmentBL&gt;
+</code></pre></div><p>to tell dagger to create the code that will provide an instance of fragment each time <code>blFragmentProvider.get()</code> will be called. Indeed, this is called here</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">return</span> <span style="color:#66d9ef">when</span> (position) {
+            <span style="color:#ae81ff">0</span> -&gt; blFragmentProvider.<span style="color:#66d9ef">get</span>()
+            <span style="color:#66d9ef">else</span> -&gt; pdtFragmentProvider.<span style="color:#66d9ef">get</span>()
+        }
+</code></pre></div><p>Like this, dagger is injecting fragment for us, and we don’t have to care about objects creation</p>
+
+    
+    <div class="nav-next-prev">
+        <div class="nav-prev">
+            
+                <a href="http://bastien.famillepaul.fr/posts/from-pk8-to-jks/"><i class="fas fa-chevron-left"></i></a>
+            
+        </div>
+        <a class="nav-top" href="#">top</i></a>
+        <div class="nav-next">
+            
+                <a href="http://bastien.famillepaul.fr/posts/publish-kotlin-lib/"><i class="fas fa-chevron-right"></i></a>
+            
+        </div>
+    </div>
+    
+
+            </div><footer>
+<div class="footer-content">
+<div class="contact-info">
+    
+    
+</div>
+
+</div>
+</footer></main>
+    </body>
+    <script src=http://bastien.famillepaul.fr/js/navbutton.js></script>
+</html>

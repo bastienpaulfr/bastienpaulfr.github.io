@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bastien Paul&#39;s Blog">
+    <meta name="Author" content="Bastien Paul">
+    <meta name="keywords" content="hugo blog linux android java kotlin c">
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/syntax.css>
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/style.css>
+    <script src="https://kit.fontawesome.com/1b7478c139.js" crossorigin="anonymous"></script>
+    <title>Bastien Paul&#39;s Blog</title>
+  </head><body><aside id="sidenav">
+    <header>
+    
+
+    <a id="branding" href=http://bastien.famillepaul.fr/>
+        
+            Bastien Paul&#39;s Blog
+        
+    </a>
+    </header>
+
+    <nav>
+        
+            		
+            <a href="/"
+                
+            >
+                <i class="fas fa-home fa-sm"></i>
+                <span>home</span>
+            </a>
+        
+            		
+            <a href="https://github.com/bastienpaulfr"
+                
+                    target="_blanck"
+                
+            >
+                <i class="fab fa-github fa-ms"></i>
+                <span>github</span>
+            </a>
+        
+            		
+            <a href="/contact"
+                
+            >
+                <i class="far fa-envelope"></i>
+                <span>contact</span>
+            </a>
+        
+</aside>
+<main id="main">
+            <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
+            <div class="content">
+    
+    <h1 id="title">Mutex Locker</h1>
+    
+      
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#préambule">Préambule</a></li>
+    <li><a href="#principe">Principe</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    <h1 id="mutex-locker">Mutex Locker</h1>
+<h2 id="préambule">Préambule</h2>
+<p>Le mutex locker fait partie du concept de <a href="http://fr.wikipedia.org/wiki/RAII">RAII</a>. Cette acronyme vient de l’anglais Resource Acquisition Is Initialization. C’est une technique de programmation qui permet de s’assurer que la ressource acquise sera bien libérée à la fin de la vie d’un objet.</p>
+<h2 id="principe">Principe</h2>
+<p>Appliqué au mutex, ce principe consiste à bloquer un mutex lors de la création d’un objet et de le libérer lors de sa destruction. On peut imaginer la création d’un objet spécifique : le <code>MutexLocker</code>.  Il faudrait qu’il puisse prendre un mutex lors de sa création et le libérer lors de sa destruction. Son constructeur va donc prendre le mutex et son destructeur le détruire.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MutexLocker</span> {
+    <span style="color:#66d9ef">public</span> <span style="color:#f92672">:</span>
+        MutexLocker(Mutex<span style="color:#f92672">&amp;</span> mutex)<span style="color:#f92672">:</span> m_mutex(mutex) {
+            m_mutex.Lock();
+        }
+        <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>MutexLocker(){
+            m_mutex.Unlock();
+        }
+
+    <span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+        Mutex<span style="color:#f92672">&amp;</span> m_mutex;
+};
+</code></pre></div><p>Son utilisation procède comme suit :</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">{
+    Mutex mutex;
+    MutexLocker <span style="color:#a6e22e">locker</span>(mutex);
+    <span style="color:#75715e">/* Maintenant le mutex est pris. Le code critique peut être exécuté. */</span>
+}
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>Son utilisation est justifié quand des exceptions peuvent arriver à tout moment. A ce moment, le mutex est assuré d’être libéré à la fin de la portée du code lorsque le locker est détruit. D’une manière générale, il est bon de l’utiliser tout le temps pour éviter de tomber dans des cas d’erreur difficiles à détecter.</p>
+
+    
+    <div class="nav-next-prev">
+        <div class="nav-prev">
+            
+                <a href="http://bastien.famillepaul.fr/posts/singleton/"><i class="fas fa-chevron-left"></i></a>
+            
+        </div>
+        <a class="nav-top" href="#">top</i></a>
+        <div class="nav-next">
+            
+                <a href="http://bastien.famillepaul.fr/posts/static-assert/"><i class="fas fa-chevron-right"></i></a>
+            
+        </div>
+    </div>
+    
+
+            </div><footer>
+<div class="footer-content">
+<div class="contact-info">
+    
+    
+</div>
+
+</div>
+</footer></main>
+    </body>
+    <script src=http://bastien.famillepaul.fr/js/navbutton.js></script>
+</html>

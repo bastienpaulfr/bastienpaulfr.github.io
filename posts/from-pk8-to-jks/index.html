@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bastien Paul&#39;s Blog">
+    <meta name="Author" content="Bastien Paul">
+    <meta name="keywords" content="hugo blog linux android java kotlin c">
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/syntax.css>
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/style.css>
+    <script src="https://kit.fontawesome.com/1b7478c139.js" crossorigin="anonymous"></script>
+    <title>Bastien Paul&#39;s Blog</title>
+  </head><body><aside id="sidenav">
+    <header>
+    
+
+    <a id="branding" href=http://bastien.famillepaul.fr/>
+        
+            Bastien Paul&#39;s Blog
+        
+    </a>
+    </header>
+
+    <nav>
+        
+            		
+            <a href="/"
+                
+            >
+                <i class="fas fa-home fa-sm"></i>
+                <span>home</span>
+            </a>
+        
+            		
+            <a href="https://github.com/bastienpaulfr"
+                
+                    target="_blanck"
+                
+            >
+                <i class="fab fa-github fa-ms"></i>
+                <span>github</span>
+            </a>
+        
+            		
+            <a href="/contact"
+                
+            >
+                <i class="far fa-envelope"></i>
+                <span>contact</span>
+            </a>
+        
+</aside>
+<main id="main">
+            <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
+            <div class="content">
+    
+    <h1 id="title">Android : Créer un fichier keystore (jks) à partir d’une clé (.pk8) et d’un certificat (.pem)</h1>
+    
+      
+    <nav id="TableOfContents"></nav>
+    <p># Android : Créer un fichier keystore (jks) à partir d’une clé (.pk8) et d’un certificat (.pem)</p>
+<ul>
+<li>Extraire la clé contenue dans le fichier pk8 et la mettre en clair dans un fichier pem</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">openssl pkcs8 -inform DER -nocrypt -in key.pk8 -out key.pem
+</code></pre></div><ul>
+<li>Regrouper la clé et le certificat dans un fichier p12 temporaire</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">openssl pkcs12 -export -in certificate.pem -inkey key.pem -out platform.p12 -password pass:android -name AndroidDebugKey
+</code></pre></div><ul>
+<li>Générer le fichier jks à partir du p12 (keytool est un outil du framework android)</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">keytool -importkeystore -deststorepass android -destkeystore platform.jks -srckeystore platform.p12 -srcstoretype PKCS12 -srcstorepass android
+</code></pre></div><ul>
+<li>Vérifier le fichier</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">keytool -list -v -keystore platform.jks
+</code></pre></div>
+    
+    <div class="nav-next-prev">
+        <div class="nav-prev">
+            
+                <a href="http://bastien.famillepaul.fr/posts/assignation-protect/"><i class="fas fa-chevron-left"></i></a>
+            
+        </div>
+        <a class="nav-top" href="#">top</i></a>
+        <div class="nav-next">
+            
+                <a href="http://bastien.famillepaul.fr/posts/dagger-material-stepper/"><i class="fas fa-chevron-right"></i></a>
+            
+        </div>
+    </div>
+    
+
+            </div><footer>
+<div class="footer-content">
+<div class="contact-info">
+    
+    
+</div>
+
+</div>
+</footer></main>
+    </body>
+    <script src=http://bastien.famillepaul.fr/js/navbutton.js></script>
+</html>

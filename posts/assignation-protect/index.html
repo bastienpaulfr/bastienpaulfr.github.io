@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bastien Paul&#39;s Blog">
+    <meta name="Author" content="Bastien Paul">
+    <meta name="keywords" content="hugo blog linux android java kotlin c">
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/syntax.css>
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/style.css>
+    <script src="https://kit.fontawesome.com/1b7478c139.js" crossorigin="anonymous"></script>
+    <title>Bastien Paul&#39;s Blog</title>
+  </head><body><aside id="sidenav">
+    <header>
+    
+
+    <a id="branding" href=http://bastien.famillepaul.fr/>
+        
+            Bastien Paul&#39;s Blog
+        
+    </a>
+    </header>
+
+    <nav>
+        
+            		
+            <a href="/"
+                
+            >
+                <i class="fas fa-home fa-sm"></i>
+                <span>home</span>
+            </a>
+        
+            		
+            <a href="https://github.com/bastienpaulfr"
+                
+                    target="_blanck"
+                
+            >
+                <i class="fab fa-github fa-ms"></i>
+                <span>github</span>
+            </a>
+        
+            		
+            <a href="/contact"
+                
+            >
+                <i class="far fa-envelope"></i>
+                <span>contact</span>
+            </a>
+        
+</aside>
+<main id="main">
+            <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
+            <div class="content">
+    
+    <h1 id="title">Protéger les classes contre la copie ou l’assignation en C&#43;&#43;</h1>
+    
+      
+    <nav id="TableOfContents"></nav>
+    <h1 id="protéger-les-classes-contre-la-copie-ou-lassignation-en-c">Protéger les classes contre la copie ou l’assignation en C++</h1>
+<p>Pour protéger les classes contre la copie, il suffit de déclarer le constructeurs de copie en <code>private</code>. Une macro peut être définie car le principe est le même pour toutes les classes.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#define DECLARE_NO_COPY_CLASS(classname)  
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>                              
+        classname(<span style="color:#66d9ef">const</span> classname<span style="color:#f92672">&amp;</span>);
+<span style="color:#75715e">#endif
+</span></code></pre></div><p>De même pour les protéger contre l’assignation, on peut déclarer la surcharge de l’opérateur <code>=</code> comme étant <code>private</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#define DECLARE_NO_ASSIGN_CLASS(classname)  
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>                                
+        classname<span style="color:#f92672">&amp;</span> <span style="color:#66d9ef">operator</span><span style="color:#f92672">=</span>(<span style="color:#66d9ef">const</span> classname<span style="color:#f92672">&amp;</span>);
+<span style="color:#75715e">#endif
+</span></code></pre></div>
+    
+    <div class="nav-next-prev">
+        <div class="nav-prev">
+            
+                <a href="http://bastien.famillepaul.fr/posts/static-assert/"><i class="fas fa-chevron-left"></i></a>
+            
+        </div>
+        <a class="nav-top" href="#">top</i></a>
+        <div class="nav-next">
+            
+                <a href="http://bastien.famillepaul.fr/posts/from-pk8-to-jks/"><i class="fas fa-chevron-right"></i></a>
+            
+        </div>
+    </div>
+    
+
+            </div><footer>
+<div class="footer-content">
+<div class="contact-info">
+    
+    
+</div>
+
+</div>
+</footer></main>
+    </body>
+    <script src=http://bastien.famillepaul.fr/js/navbutton.js></script>
+</html>

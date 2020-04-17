@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bastien Paul&#39;s Blog">
+    <meta name="Author" content="Bastien Paul">
+    <meta name="keywords" content="hugo blog linux android java kotlin c">
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/syntax.css>
+    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/style.css>
+    <script src="https://kit.fontawesome.com/1b7478c139.js" crossorigin="anonymous"></script>
+    <title>Bastien Paul&#39;s Blog</title>
+  </head><body><aside id="sidenav">
+    <header>
+    
+
+    <a id="branding" href=http://bastien.famillepaul.fr/>
+        
+            Bastien Paul&#39;s Blog
+        
+    </a>
+    </header>
+
+    <nav>
+        
+            		
+            <a href="/"
+                
+            >
+                <i class="fas fa-home fa-sm"></i>
+                <span>home</span>
+            </a>
+        
+            		
+            <a href="https://github.com/bastienpaulfr"
+                
+                    target="_blanck"
+                
+            >
+                <i class="fab fa-github fa-ms"></i>
+                <span>github</span>
+            </a>
+        
+            		
+            <a href="/contact"
+                
+            >
+                <i class="far fa-envelope"></i>
+                <span>contact</span>
+            </a>
+        
+</aside>
+<main id="main">
+            <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
+            <div class="content">
+    
+    <h1 id="title">Publish a Kotlin lib with gradle Kotlin DSL</h1>
+    
+      
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#bootstrap-kotlin-project">Bootstrap Kotlin project</a></li>
+    <li><a href="#setup">Setup</a></li>
+  </ul>
+</nav>
+    <h1 id="publish-a-kotlin-lib-with-gradle-kotlin-dsl">Publish a Kotlin lib with gradle Kotlin DSL</h1>
+<p>I wanted to play more with Kotlin and I wanted to publish <a href="https://github.com/bastienpaulfr/geojson-kotlin">KGeoGson</a> lib to a remote maven repo.</p>
+<p>I was following <a href="https://guides.gradle.org/building-kotlin-jvm-libraries/">gradle guide</a> to build my kotlin project with Kotlin DSL.</p>
+<h2 id="bootstrap-kotlin-project">Bootstrap Kotlin project</h2>
+<p>Create project directory with files of your library you want to build and publish. You may have a directory structure like the following:</p>
+<pre><code>project
+├── build.gradle.kts
+├── settings.gradle.kts
+└── my-kotlin-library
+    ├── build.gradle.kts
+    └── src
+        ├── main
+        │   └── kotlin
+        │       └── org
+        │           └── example
+        │               └── MyLibrary.kt
+        └── test
+            └── kotlin
+                └── org
+                    └── example
+                        └── MyLibraryTest.kt
+</code></pre><h2 id="setup">Setup</h2>
+<p>Root <strong>build.gradle.kts</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">plugins {
+   <span style="color:#960050;background-color:#1e0010">`</span>build-scan<span style="color:#960050;background-color:#1e0010">`</span>
+}
+
+buildScan {
+   termsOfServiceUrl = <span style="color:#e6db74">&#34;https://gradle.com/terms-of-service&#34;</span>
+   termsOfServiceAgree = <span style="color:#e6db74">&#34;yes&#34;</span>
+
+   publishAlways()
+}
+
+<span style="color:#66d9ef">val</span> clean <span style="color:#66d9ef">by</span> tasks.creating(Delete<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>) {
+   delete(rootProject.buildDir)
+}
+</code></pre></div><p>In this file, « build-scan » plugin is activated and a clean task is added. That’s all for it</p>
+<p><strong>settings.gradle.kts</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">include(<span style="color:#e6db74">&#34;lib&#34;</span>)
+</code></pre></div><p>In this file, we define our modules</p>
+<p><strong>lib/build.gradle.kts</strong></p>
+<p>First we are adding some plugins</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">plugins {
+   <span style="color:#75715e">// Add Kotlin plugin to build our Kotlin lib
+</span><span style="color:#75715e"></span>   kotlin(<span style="color:#e6db74">&#34;jvm&#34;</span>) version <span style="color:#e6db74">&#34;1.3.21&#34;</span>
+   <span style="color:#75715e">// Get version from git tags
+</span><span style="color:#75715e"></span>   id(<span style="color:#e6db74">&#34;fr.coppernic.versioning&#34;</span>) version <span style="color:#e6db74">&#34;3.1.2&#34;</span>
+   <span style="color:#75715e">// Documentation for our code
+</span><span style="color:#75715e"></span>   id(<span style="color:#e6db74">&#34;org.jetbrains.dokka&#34;</span>) version <span style="color:#e6db74">&#34;0.9.17&#34;</span>
+   <span style="color:#75715e">// Publication to bintray
+</span><span style="color:#75715e"></span>   id(<span style="color:#e6db74">&#34;com.jfrog.bintray&#34;</span>) version <span style="color:#e6db74">&#34;1.8.4&#34;</span>
+   <span style="color:#75715e">// Maven publication
+</span><span style="color:#75715e"></span>   <span style="color:#960050;background-color:#1e0010">`</span>maven-publish<span style="color:#960050;background-color:#1e0010">`</span>
+}
+</code></pre></div><p>Then we are defining dependencies and their repositories for our code</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">repositories {
+   jcenter()
+   mavenCentral()
+}
+
+dependencies {
+   implementation(<span style="color:#e6db74">&#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7&#34;</span>)
+   implementation(<span style="color:#e6db74">&#34;com.google.code.gson:gson:2.8.5&#34;</span>)
+
+   testCompile(<span style="color:#e6db74">&#34;junit:junit:4.12&#34;</span>)
+}
+</code></pre></div><p>We need some more tasks to add sources and javadoc to our lib. We are starting by configuring dokka task:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">tasks {
+   dokka {
+       outputFormat = <span style="color:#e6db74">&#34;html&#34;</span>
+       outputDirectory = <span style="color:#e6db74">&#34;$buildDir/javadoc&#34;</span>
+       moduleName = rootProject.name
+   }
+}
+</code></pre></div><p>We can then bundle documentation into a jar</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">val</span> dokkaJar <span style="color:#66d9ef">by</span> tasks.creating(Jar<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>) {
+   group = JavaBasePlugin.DOCUMENTATION_GROUP
+   description = <span style="color:#e6db74">&#34;Assembles Kotlin docs with Dokka&#34;</span>
+   archiveClassifier.<span style="color:#66d9ef">set</span>(<span style="color:#e6db74">&#34;javadoc&#34;</span>)
+   from(tasks.dokka)
+   dependsOn(tasks.dokka)
+}
+</code></pre></div><p>We are creating another jar containing sources</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">val</span> sourcesJar <span style="color:#66d9ef">by</span> tasks.creating(Jar<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>) {
+   archiveClassifier.<span style="color:#66d9ef">set</span>(<span style="color:#e6db74">&#34;sources&#34;</span>)
+   from(sourceSets.getByName(<span style="color:#e6db74">&#34;main&#34;</span>).allSource)
+}
+</code></pre></div><p>At this stage, you are able to compile your lib. The most important part of this article begins. Let’s see how publication is working. It is very important to configure pom.xml file of maven artifact in a right manner. Otherwise you will not be able to submit your library into JCenter repo.</p>
+<p>Let’s start configuring base of maven publish plugin</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">val</span> artifactName = <span style="color:#e6db74">&#34;libname&#34;</span>
+<span style="color:#66d9ef">val</span> artifactGroup = <span style="color:#e6db74">&#34;org.example&#34;</span>
+
+publishing {
+   publications {
+       create&lt;MavenPublication&gt;(<span style="color:#e6db74">&#34;lib&#34;</span>) {
+           groupId = artifactGroup
+           artifactId = artifactName
+           <span style="color:#75715e">// version is gotten from an external plugin
+</span><span style="color:#75715e"></span>           version = project.versioning.info.display
+           <span style="color:#75715e">// This is the main artifact
+</span><span style="color:#75715e"></span>           from(components[<span style="color:#e6db74">&#34;java&#34;</span>])
+           <span style="color:#75715e">// We are adding documentation artifact
+</span><span style="color:#75715e"></span>           artifact(dokkaJar)
+           <span style="color:#75715e">// And sources
+</span><span style="color:#75715e"></span>           artifact(sourcesJar)
+       }
+   }
+}
+</code></pre></div><p>Now we need to add information about package in <strong>pom.xml</strong> file. You can edit <strong>pom.xml</strong> with <code>pom.withXml {</code> code</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">val</span> pomUrl = <span style="color:#e6db74">&#34;...&#34;</span>
+<span style="color:#66d9ef">val</span> pomScmUrl = <span style="color:#e6db74">&#34;...&#34;</span>
+<span style="color:#66d9ef">val</span> pomIssueUrl = <span style="color:#e6db74">&#34;...&#34;</span>
+<span style="color:#66d9ef">val</span> pomDesc = <span style="color:#e6db74">&#34;...&#34;</span>
+<span style="color:#66d9ef">val</span> pomScmConnection = <span style="color:#e6db74">&#34;&#34;</span>...<span style="color:#e6db74">&#34;
+</span><span style="color:#e6db74"></span><span style="color:#66d9ef">val</span> pomScmDevConnection = <span style="color:#e6db74">&#34;...&#34;</span>
+
+<span style="color:#66d9ef">val</span> githubRepo = <span style="color:#e6db74">&#34;...&#34;</span>
+<span style="color:#66d9ef">val</span> githubReadme = <span style="color:#e6db74">&#34;...&#34;</span>
+
+<span style="color:#66d9ef">val</span> pomLicenseName = <span style="color:#e6db74">&#34;The Apache Software License, Version 2.0&#34;</span>
+<span style="color:#66d9ef">val</span> pomLicenseUrl = <span style="color:#e6db74">&#34;http://www.apache.org/licenses/LICENSE-2.0.txt&#34;</span>
+<span style="color:#66d9ef">val</span> pomLicenseDist = <span style="color:#e6db74">&#34;repo&#34;</span>
+
+<span style="color:#66d9ef">val</span> pomDeveloperId = <span style="color:#e6db74">&#34;...&#34;</span>
+<span style="color:#66d9ef">val</span> pomDeveloperName = <span style="color:#e6db74">&#34;...&#34;</span>
+
+
+publishing {
+   publications {
+       create&lt;MavenPublication&gt;(<span style="color:#e6db74">&#34;lib&#34;</span>) {
+<span style="color:#a6e22e">           [...]</span>
+
+           pom.withXml {
+               asNode().apply {
+                   appendNode(<span style="color:#e6db74">&#34;description&#34;</span>, pomDesc)
+                   appendNode(<span style="color:#e6db74">&#34;name&#34;</span>, rootProject.name)
+                   appendNode(<span style="color:#e6db74">&#34;url&#34;</span>, pomUrl)
+                   appendNode(<span style="color:#e6db74">&#34;licenses&#34;</span>).appendNode(<span style="color:#e6db74">&#34;license&#34;</span>).apply {
+                       appendNode(<span style="color:#e6db74">&#34;name&#34;</span>, pomLicenseName)
+                       appendNode(<span style="color:#e6db74">&#34;url&#34;</span>, pomLicenseUrl)
+                       appendNode(<span style="color:#e6db74">&#34;distribution&#34;</span>, pomLicenseDist)
+                   }
+                   appendNode(<span style="color:#e6db74">&#34;developers&#34;</span>).appendNode(<span style="color:#e6db74">&#34;developer&#34;</span>).apply {
+                       appendNode(<span style="color:#e6db74">&#34;id&#34;</span>, pomDeveloperId)
+                       appendNode(<span style="color:#e6db74">&#34;name&#34;</span>, pomDeveloperName)
+                   }
+                   appendNode(<span style="color:#e6db74">&#34;scm&#34;</span>).apply {
+                       appendNode(<span style="color:#e6db74">&#34;url&#34;</span>, pomScmUrl)
+                       appendNode(<span style="color:#e6db74">&#34;connection&#34;</span>, pomScmConnection)
+                   }
+               }
+           }
+       }
+   }
+}
+</code></pre></div><p>Now that your maven publication is well configured, you can configure bintray plugin</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">bintray {
+   <span style="color:#75715e">// Getting bintray user and key from properties file or command line
+</span><span style="color:#75715e"></span>   user = <span style="color:#66d9ef">if</span> (project.hasProperty(<span style="color:#e6db74">&#34;bintray_user&#34;</span>)) project.property(<span style="color:#e6db74">&#34;bintray_user&#34;</span>) <span style="color:#66d9ef">as</span> String <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;&#34;</span>
+   key = <span style="color:#66d9ef">if</span> (project.hasProperty(<span style="color:#e6db74">&#34;bintray_key&#34;</span>)) project.property(<span style="color:#e6db74">&#34;bintray_key&#34;</span>) <span style="color:#66d9ef">as</span> String <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;&#34;</span>
+
+   <span style="color:#75715e">// Automatic publication enabled
+</span><span style="color:#75715e"></span>   publish = <span style="color:#66d9ef">true</span>
+
+   <span style="color:#75715e">// Set maven publication onto bintray plugin
+</span><span style="color:#75715e"></span>   setPublications(<span style="color:#e6db74">&#34;lib&#34;</span>)
+
+   <span style="color:#75715e">// Configure package
+</span><span style="color:#75715e"></span>   pkg.apply {
+       repo = <span style="color:#e6db74">&#34;maven&#34;</span>
+       name = rootProject.name
+       setLicenses(<span style="color:#e6db74">&#34;Apache-2.0&#34;</span>)
+       setLabels(<span style="color:#e6db74">&#34;Gson&#34;</span>, <span style="color:#e6db74">&#34;json&#34;</span>, <span style="color:#e6db74">&#34;GeoJson&#34;</span>, <span style="color:#e6db74">&#34;GPS&#34;</span>, <span style="color:#e6db74">&#34;Kotlin&#34;</span>)
+       vcsUrl = pomScmUrl
+       websiteUrl = pomUrl
+       issueTrackerUrl = pomIssueUrl
+       githubRepo = githubRepo
+       githubReleaseNotesFile = githubReadme
+
+       <span style="color:#75715e">// Configure version
+</span><span style="color:#75715e"></span>       version.apply {
+           name = project.versioning.info.display
+           desc = pomDesc
+           released = Date().toString()
+           vcsTag = project.versioning.info.tag
+       }
+   }
+}
+</code></pre></div><p>Here we is ! Happy publication !</p>
+
+    
+    <div class="nav-next-prev">
+        <div class="nav-prev">
+            
+                <a href="http://bastien.famillepaul.fr/posts/dagger-material-stepper/"><i class="fas fa-chevron-left"></i></a>
+            
+        </div>
+        <a class="nav-top" href="#">top</i></a>
+        <div class="nav-next">
+            
+                <a href="http://bastien.famillepaul.fr/posts/circular-file-logger/"><i class="fas fa-chevron-right"></i></a>
+            
+        </div>
+    </div>
+    
+
+            </div><footer>
+<div class="footer-content">
+<div class="contact-info">
+    
+    
+</div>
+
+</div>
+</footer></main>
+    </body>
+    <script src=http://bastien.famillepaul.fr/js/navbutton.js></script>
+</html>

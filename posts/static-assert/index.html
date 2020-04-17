@@ -52,10 +52,33 @@
 <main id="main">
             <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
             <div class="content">
-    <div class="section">
-        <dev class="section-title">tags</dev>
-        
+    
+    <h1 id="title">Assert Statique</h1>
+    
+      
+    <nav id="TableOfContents"></nav>
+    <h1 id="assert-statique">Assert Statique</h1>
+<p>L’utilisation d’un assert statique peut être utile dans le cas ou une condition doit être testée au moment de la compilation. Par exemple la taille d’un tableau. Le principe est d’utiliser une macro pour définir une expression. Si le test est valide alors l’expression générée l’est aussi, sinon elle résulte en une erreur de compilation.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#define STATIC_ASSERT(cond)    typedef int ERROR_##__LINE__[(cond) ? 1 : -1]
+</span></code></pre></div><p>Ici, on utilise <code>typedef</code> pour définir un type tableau. Si la condition est valide alors la taille du tableau est positive. Sinon elle est négative ce qui résulte en une erreur de compilation.</p>
+<p>Exemple d’utilisation :</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">STATIC_ASSERT(<span style="color:#66d9ef">sizeof</span>(object1) <span style="color:#f92672">==</span> <span style="color:#66d9ef">sizeof</span>(object2));
+</code></pre></div>
+    
+    <div class="nav-next-prev">
+        <div class="nav-prev">
+            
+                <a href="http://bastien.famillepaul.fr/posts/mutex-locker/"><i class="fas fa-chevron-left"></i></a>
+            
+        </div>
+        <a class="nav-top" href="#">top</i></a>
+        <div class="nav-next">
+            
+                <a href="http://bastien.famillepaul.fr/posts/assignation-protect/"><i class="fas fa-chevron-right"></i></a>
+            
+        </div>
     </div>
+    
 
             </div><footer>
 <div class="footer-content">
