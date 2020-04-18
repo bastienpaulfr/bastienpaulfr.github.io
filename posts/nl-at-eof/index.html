@@ -1,65 +1,15 @@
 <!DOCTYPE html>
-<html><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bastien Paul&#39;s Blog">
-    <meta name="Author" content="Bastien Paul">
-    <meta name="keywords" content="hugo blog linux android java kotlin c">
-    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/syntax.css>
-    <link rel="stylesheet" href=http://bastien.famillepaul.fr/css/style.css>
-    <script src="https://kit.fontawesome.com/1b7478c139.js" crossorigin="anonymous"></script>
-    <title>Bastien Paul&#39;s Blog</title>
-  </head><body><aside id="sidenav">
-    <header>
-    
-
-    <a id="branding" href=http://bastien.famillepaul.fr/>
-        
-            Bastien Paul&#39;s Blog
-        
-    </a>
-    </header>
-
-    <nav>
-        
-            		
-            <a href="/"
-                
-            >
-                <i class="fas fa-home fa-sm"></i>
-                <span>home</span>
-            </a>
-        
-            		
-            <a href="https://github.com/bastienpaulfr"
-                
-                    target="_blanck"
-                
-            >
-                <i class="fab fa-github fa-ms"></i>
-                <span>github</span>
-            </a>
-        
-            		
-            <a href="/contact"
-                
-            >
-                <i class="far fa-envelope"></i>
-                <span>contact</span>
-            </a>
-        
-</aside>
-<main id="main">
-            <a href="javascript:void(0)" id="closebtn" onclick="navToggle()"><i class="fas fa-bars fa-lg"></i></a>
-            <div class="content">
-    
-    <h1 id="title">Add a new line at the end of each text files tracked by git</h1>
-    
-      
-    <nav id="TableOfContents"></nav>
-    <h1 id="add-a-new-line-at-the-end-of-each-text-files-tracked-by-git">Add a new line at the end of each text files tracked by git</h1>
-<p>One of the most anoying thing I meet when I am coding software, is the « No new line at end of file » warning.</p>
-<p><img src="/nl.png" alt="manifest"></p>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>Add a new line at the end of each text files tracked by git&nbsp;&ndash;&nbsp;Bastien Paul&#39;s Blog</title><link rel="stylesheet" href="/css/core.min.1891ffa69927bbd682f44b6c2c8650b918d38f429f493f7835afe8de55ffc12269eda9e4c6c1fc1b15927a731d6c49f3.css" integrity="sha384-GJH/ppknu9aC9EtsLIZQuRjTj0KfST94Na/o3lX/wSJp7ankxsH8GxWSenMdbEnz"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Add a new line at the end of each text files tracked by git" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><span class="site name">Bastien Paul's Blog</span></a></span>
+        <span class="header right-side"></span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">Add a new line at the end of each text files tracked by git</h1><p class="article date">2020-03-30</p></section><article class="article markdown-body"><p>One of the most anoying thing I meet when I am coding software, is the « No new line at end of file » warning.</p>
+<p><a target="_blank" rel="noopener noreferrer" 
+  href="/nl.png"><img  src="/nl.png"
+        alt="manifest"/></a></p>
 <p>For this, I have written a little script based of my research on google. I want to rewrite all text files tracked by git and ensure that a new line is written at the end of file.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">#!/bin/bash
 </span><span style="color:#75715e"></span>
@@ -77,32 +27,12 @@
   <span style="color:#66d9ef">fi</span>
 <span style="color:#66d9ef">done</span>
 </code></pre></div><p>You can execute it from a git repository and commit the result.</p>
+</article></div><section class="article navigation"><p><a class="link" href="/posts/circular-file-logger/"><span class="li">&rarr;</span>How to create a circlular file logger with Timber</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Bastien PAUL.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section></div>
+</body>
 
-    
-    <div class="nav-next-prev">
-        <div class="nav-prev">
-            
-                <a href="http://bastien.famillepaul.fr/posts/circular-file-logger/"><i class="fas fa-chevron-left"></i></a>
-            
-        </div>
-        <a class="nav-top" href="#">top</i></a>
-        <div class="nav-next">
-            
-                <a class="grayed-out" href="javascript:void()"><i class="fas fa-chevron-right"></i></a>
-            
-        </div>
-    </div>
-    
-
-            </div><footer>
-<div class="footer-content">
-<div class="contact-info">
-    
-    
-</div>
-
-</div>
-</footer></main>
-    </body>
-    <script src=http://bastien.famillepaul.fr/js/navbutton.js></script>
 </html>
