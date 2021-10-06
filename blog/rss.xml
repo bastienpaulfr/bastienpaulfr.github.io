@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>echo "Hello World ! " Blog</title>
+        <link>https://famillepaul.fr/blog</link>
+        <description>echo "Hello World ! " Blog</description>
+        <lastBuildDate>Mon, 30 Mar 2020 13:04:26 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[Add a new line at the end of each text files tracked by git]]></title>
+            <link>https://famillepaul.fr/blog/nl-at-eof</link>
+            <guid>Add a new line at the end of each text files tracked by git</guid>
+            <pubDate>Mon, 30 Mar 2020 13:04:26 GMT</pubDate>
+            <description><![CDATA[One of the most anoying thing I meet when I am coding software, is the « No new line at end of file » warning.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[How to create a circlular file logger with Timber]]></title>
+            <link>https://famillepaul.fr/blog/circular-file-logger</link>
+            <guid>How to create a circlular file logger with Timber</guid>
+            <pubDate>Fri, 01 Mar 2019 13:04:06 GMT</pubDate>
+            <description><![CDATA[In some applications, I need to store my logs in a file aside of traditional logcat. For this, I am making use of Timber library. Because I don’t want to make my device full of logs, I wanted to use circular log files so that I can control the maximum amount of bytes taken by log data. To achieve this, I will use java Logger API to implement a new Timber.Tree. I also want some feature like log formatting and filtering.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Publish a Kotlin lib with gradle Kotlin DSL]]></title>
+            <link>https://famillepaul.fr/blog/publish-kotlin-lib</link>
+            <guid>Publish a Kotlin lib with gradle Kotlin DSL</guid>
+            <pubDate>Fri, 08 Feb 2019 13:03:53 GMT</pubDate>
+            <description><![CDATA[I wanted to play more with Kotlin and I wanted to publish KGeoGson lib to a remote maven repo.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Use Dagger Provider with Android Material Stepper]]></title>
+            <link>https://famillepaul.fr/blog/dagger-material-stepper</link>
+            <guid>Use Dagger Provider with Android Material Stepper</guid>
+            <pubDate>Thu, 24 Jan 2019 13:03:38 GMT</pubDate>
+            <description><![CDATA[On an Android project, I am using android-material-stepper from StepStone. I am also using dependency injection with dagger.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Android : Créer un fichier keystore (jks) à partir d’une clé (.pk8) et d’un certificat (.pem)]]></title>
+            <link>https://famillepaul.fr/blog/from-pk8-to-jks</link>
+            <guid>Android : Créer un fichier keystore (jks) à partir d’une clé (.pk8) et d’un certificat (.pem)</guid>
+            <pubDate>Mon, 14 Nov 2016 13:03:19 GMT</pubDate>
+            <description><![CDATA[- Extraire la clé contenue dans le fichier pk8 et la mettre en clair dans un fichier pem]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Protéger les classes contre la copie ou l’assignation en C++]]></title>
+            <link>https://famillepaul.fr/blog/assignation-protect</link>
+            <guid>Protéger les classes contre la copie ou l’assignation en C++</guid>
+            <pubDate>Thu, 14 Aug 2014 13:02:46 GMT</pubDate>
+            <description><![CDATA[Pour protéger les classes contre la copie, il suffit de déclarer le constructeurs de copie en private. Une macro peut être définie car le principe est le même pour toutes les classes.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Assert Statique]]></title>
+            <link>https://famillepaul.fr/blog/static-assert</link>
+            <guid>Assert Statique</guid>
+            <pubDate>Mon, 04 Aug 2014 13:02:57 GMT</pubDate>
+            <description><![CDATA[L’utilisation d’un assert statique peut être utile dans le cas ou une condition doit être testée au moment de la compilation. Par exemple la taille d’un tableau. Le principe est d’utiliser une macro pour définir une expression. Si le test est valide alors l’expression générée l’est aussi, sinon elle résulte en une erreur de compilation.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Mutex Locker]]></title>
+            <link>https://famillepaul.fr/blog/mutex-locker</link>
+            <guid>Mutex Locker</guid>
+            <pubDate>Mon, 04 Aug 2014 13:02:32 GMT</pubDate>
+            <description><![CDATA[Préambule]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Singleton]]></title>
+            <link>https://famillepaul.fr/blog/singleton</link>
+            <guid>Singleton</guid>
+            <pubDate>Mon, 04 Aug 2014 13:02:16 GMT</pubDate>
+            <description><![CDATA[Présentation]]></description>
+        </item>
+        <item>
+            <title><![CDATA[The TUN/TAP interface on Linux]]></title>
+            <link>https://famillepaul.fr/blog/tun-tap</link>
+            <guid>The TUN/TAP interface on Linux</guid>
+            <pubDate>Wed, 08 Dec 2010 09:27:07 GMT</pubDate>
+            <description><![CDATA[Recently, I had to work with the tun interface on Linux. There is not a lot of documentation on this subject so here is a little presentation.]]></description>
+        </item>
+    </channel>
+</rss>
