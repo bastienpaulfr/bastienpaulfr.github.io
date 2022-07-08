@@ -4,9 +4,16 @@
         <title>echo "Hello World ! " Blog</title>
         <link>https://famillepaul.fr/blog</link>
         <description>echo "Hello World ! " Blog</description>
-        <lastBuildDate>Mon, 30 Mar 2020 13:04:26 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 08 Jul 2022 12:55:46 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[How to make a good converter]]></title>
+            <link>https://famillepaul.fr/blog/converters</link>
+            <guid>How to make a good converter</guid>
+            <pubDate>Fri, 08 Jul 2022 12:55:46 GMT</pubDate>
+            <description><![CDATA[Purpose]]></description>
+        </item>
         <item>
             <title><![CDATA[Add a new line at the end of each text files tracked by git]]></title>
             <link>https://famillepaul.fr/blog/nl-at-eof</link>

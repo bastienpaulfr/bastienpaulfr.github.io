@@ -2,11 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://famillepaul.fr/blog</id>
     <title>echo "Hello World ! " Blog</title>
-    <updated>2020-03-30T13:04:26.000Z</updated>
+    <updated>2022-07-08T12:55:46.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://famillepaul.fr/blog"/>
     <subtitle>echo "Hello World ! " Blog</subtitle>
     <icon>https://famillepaul.fr/img/initiales_small.png</icon>
+    <entry>
+        <title type="html"><![CDATA[How to make a good converter]]></title>
+        <id>How to make a good converter</id>
+        <link href="https://famillepaul.fr/blog/converters"/>
+        <updated>2022-07-08T12:55:46.000Z</updated>
+        <summary type="html"><![CDATA[Purpose]]></summary>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Add a new line at the end of each text files tracked by git]]></title>
         <id>Add a new line at the end of each text files tracked by git</id>
